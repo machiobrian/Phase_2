@@ -1,0 +1,33 @@
+run as super user: sudo su
+https://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
+
+https://pythonprogramming.net/haar-cascade-object-detection-python-opencv-tutorial/?source=post_page---------------------------
+
+https://www.img2go.com/resize-image
+
+
+create a positive and negative image directory
+have your positive image(s)
+have your negative imagesssssss
+
+generate a negative.txt, a background, from the negative images: 
+find ./negative_images -iname "*.jpg" > negative.txt
+
+#create some positive samples based on the positive image
+
+opencv_createsamples -img right.png -bg negative.txt -info positive_images/positive.lst -pngoutput positive_images -maxxangle 0.5 -maxyangle 0.5 -maxzangle 0.5 -num 1900
+
+#create the vector file, where we stitch all of our positive images
+
+opencv_createsamples -info positive_images/positive.lst -num 1900 -w 20 -h 20 -vec positives.vec
+
+create a data directory -> output for our images
+mkdir data_output
+
+#run the train command
+
+opencv_traincascade -data data_output -vec positives.vec -bg negative.txt -numPos 800 -numNeg 500 -numStages 20 -w 20 -h 20
+
+positive images should be twice negative images
+
+#we shall alter the number of stages based on accuracy...it takes forever to train on 30
