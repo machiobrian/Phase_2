@@ -1,7 +1,10 @@
 import RPi.GPIO as GPIO
 import time
+from motor_module import stop, forward
+
 
 def ultra_sonar():
+    
     try:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -35,16 +38,16 @@ def ultra_sonar():
                 pulse_end = time.time()
 
             pulse_duration = pulse_end - pulse_start
+                      
             distance = pulse_duration * 17000
             distance = round(distance, 2)
-
-            print(distance)
+          
+            print(distance)       
             
-            if distance <= 15:
-                print('stopping')
-    except:
+            
+    except:        
         GPIO.cleanup()
-
+               
 if __name__ == '__main__':    
-    ultra_sonar()        
-
+    ultra_sonar()
+    
