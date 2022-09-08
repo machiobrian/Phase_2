@@ -28,6 +28,24 @@ def stop():
     motors[2].stop()
     motors[3].stop()
 
+def move_reverse():
+    motors[0].backward()
+    motors[1].backward()
+    motors[2].backward()
+    motors[3].backward()
+
+def move_right():
+    motors[0].forward()
+    motors[1].backward()
+    motors[2].backward()
+    motors[3].forward()
+
+def move_left():
+    motors[0].backward()
+    motors[1].forward()
+    motors[2].forward()
+    motors[3].backward()
+
 speed = 60
 pwm_out.value = (speed/100)
 
