@@ -43,7 +43,6 @@ def left():
     motors[2].forward()
     motors[3].backward()
     
-    
 def stop():
     
     motors[0].stop()
