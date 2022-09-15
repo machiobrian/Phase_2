@@ -92,3 +92,6 @@ while success and not clicked:
 
 cv2.destroyAllWindows()
 cameraCapture.release()
+
+
+image_scaled = 

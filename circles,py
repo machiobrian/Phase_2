@@ -1,0 +1,20 @@
+import cv2 as cv
+import numpy as np
+
+image = cv.imread('/home/machio_b/Desktop/Final Semester/Project/Vision AGV/Phase_2/Pi_Folder/caps.jpg')
+gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+blur = cv.medianBlur(gray, 5)
+circles = cv.HoughCircles(blur, cv.HOUGH_GRADIENT,1.5, 10)
+
+
+for i in circles[0, :]:
+    #draw the outer circle
+    cv.circle(image, (i[0],i[1]),i[2], (255,0,0),2)
+
+    #draw circle center
+    cv.circle(image, (i[0],i[1]),2,(0,255,0),5)
+
+cv.imshow('detected circles', image)
+cv.waitKey(0)
+cv.destroyAllWindows()
