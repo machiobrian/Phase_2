@@ -1,20 +1,59 @@
+#hough circles detect circles o blurred images
+
 import cv2 as cv
 import numpy as np
 
-image = cv.imread('/home/machio_b/Desktop/Final Semester/Project/Vision AGV/Phase_2/Pi_Folder/caps.jpg')
-gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
-blur = cv.medianBlur(gray, 5)
-circles = cv.HoughCircles(blur, cv.HOUGH_GRADIENT,1.5, 10)
+# image = cv.imread('/home/machio_b/Desktop/Final Semester/Project/Vision AGV/Phase_2/Pi_Folder/caps.jpg',0)
+#cv.imshow('image',image)
+# frame = cv.imread('/home/machio_b/Desktop/Final Semester/Project/Vision AGV/Phase_2/Pi_Folder/caps.jpg',1)
 
 
-for i in circles[0, :]:
-    #draw the outer circle
-    cv.circle(image, (i[0],i[1]),i[2], (255,0,0),2)
+clicked = False
+def onMouse(event, x, y, flags, param):
+    global clicked
+    if event == cv.EVENT_LBUTTONUP:
+        clicked = True
+cameraCapture = cv.VideoCapture(0)
+cv.namedWindow('camera')
+cv.setMouseCallback('camera', onMouse)
 
-    #draw circle center
-    cv.circle(image, (i[0],i[1]),2,(0,255,0),5)
+#Read and Process frames in loop
+success, frame = cameraCapture.read()
 
-cv.imshow('detected circles', image)
-cv.waitKey(0)
-cv.destroyAllWindows()
+while success and not clicked:
+    cv.waitKey(1)
+    success, frame = cameraCapture.read()
+
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    img = cv.medianBlur(gray, 37)
+    #cv.imshow("blurred", img)
+
+    blurred = cv.GaussianBlur(img, (11,11),0)
+    #cv.imshow('image',blurred)
+
+
+    #find circles in grascale images using Hough Transform
+    circles = cv.HoughCircles(blurred, cv.HOUGH_GRADIENT,1,100,param1=100, param2=90, minRadius=0, maxRadius=200)
+
+    #check to see if there is any detection
+    if circles is not None:
+        #iif there are some detections, convert radius and x,y(center)
+        # coordinates to integer
+        circles = np.round(circles[0,:].astype("int")) 
+
+        for (x,y,r) in circles:
+            #draw circles around the input image
+            cv.circle(frame, (x,y), r, (0,255,0), 3)
+            #draw a rectungular (center) in the output image
+            cv.rectangle(frame, (x-2, y-2),(x+2, y+2),(0,255,0),-1)                  
+        for i in circles[0, :]:
+            cv.circle(frame, (i[0], i[1]), i[2], (0, 255, 0), 2)
+            cv.circle(frame, (i[0], i[1]), 2, (0, 0, 255), 3)
+
+    cv.imshow("Detections", frame)
+    # cv.imwrite("CircleDetection.jpg",frame)
+    # cv.waitKey(0)
+
+    # if key == ord('q'):
+    #     break

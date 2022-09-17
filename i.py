@@ -35,6 +35,16 @@ while success and not clicked:
     success, frame = cameraCapture.read()
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    image = frame.array
+    ret,binary = cv2.threshold(gray, 127,255,cv2.THRESH_BINARY )
+    contours, heirarchy = cv2.findContours(binary,cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    x,y,w,h = cv2.boundingRect(contours[0])
+    cv2.rectangle(frame, (x,y), (x+w, y+h) (0,255,0),2)
+    cv2.imshow("result", frame)
+
+
+
     img = cv2.medianBlur(gray, 37)
     circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT,
                               1, 50, param1=120, param2=40)
@@ -92,6 +102,3 @@ while success and not clicked:
 
 cv2.destroyAllWindows()
 cameraCapture.release()
-
-
-image_scaled = 
