@@ -13,9 +13,8 @@ frame_rate = 15
 rot = 0
 
 
-stop_sign = cv.CascadeClassifier('/home/pi/Desktop/Phase_2/Cascade_files/stop_cascade.xml')
-right_sign = cv.CascadeClassifier('/home/pi/Desktop/Phase_2/Cascade_files/right_cascade1.xml')
-left_sign = cv.CascadeClassifier('/home/pi/Desktop/Phase_2/Cascade_files/left_cascade1.xml')
+stop_sign = cv.CascadeClassifier('/home/pi/Desktop/Cascade_files/stop_cascade.xml')
+
 #initialize the camera
 camera = PiCamera()
 camera.resolution = res
@@ -61,18 +60,9 @@ def main_camera():
 #             print(width, height)
             
             pixel_measurement(width, height)
-
-        for (x,y,w,h) in left_sign_scaled:
-            #draw a rectangle around the stop sign
-            stop_sign_rect = cv.rectangle(image, (x,y),(x+w,y+h),(0,255,0),1)
-            width = w
-            height = h
-#             print(width, height)
-            
-            pixel_measurement(width, height)
-                      
+                    
               
-        #print(image.shape)
+
         cv.imshow("frame", image)
         key = cv.waitKey(1) & 0xFF
 
